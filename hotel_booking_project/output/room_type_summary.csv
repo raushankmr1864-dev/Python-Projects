@@ -1,0 +1,4 @@
+Room_Type,Bookings,Occupied_Room_Nights,Avg_Room_Rate,Avg_Stay_Nights,Total_Revenue,Occupancy_Share_%,Revenue_Share_%,Cancellation_%
+Standard,311,1203,8815.9,3.87,10664972.53,50.27,50.59,18.8
+Deluxe,203,835,8468.29,4.11,7157340.2,34.89,33.95,21.62
+Suite,87,355,9238.78,4.08,3258559.21,14.83,15.46,19.44

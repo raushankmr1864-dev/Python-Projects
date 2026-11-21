@@ -1,0 +1,388 @@
+
+================================================================================
+TASK 1: LOAD AND INSPECT THE BOOKING RECORDS
+================================================================================
+Rows: 761   Columns: 9
+
+First 5 records:
+  Booking_ID Checkin_Date  Lead_Time_Days Room_Type  Room_Rate  Nights Booking_Channel Traveler_Type Canceled
+0     B00000   2025-05-15             NaN    Deluxe    3080.04       6  Direct Website      Business       No
+1     B00001   2025-10-14           123.0    Deluxe    6418.87       2    Travel Agent       Leisure       No
+2     B00002   2026-08-08           103.0  Standard   14073.29       2    Travel Agent       Leisure       No
+3     B00003   2026-03-20            93.0    Deluxe   14371.81       6       Corporate       Leisure      Yes
+4     B00004   2025-05-15           159.0  Standard   14898.76       7    Travel Agent      Business       No
+
+Column data types:
+Booking_ID             str
+Checkin_Date           str
+Lead_Time_Days     float64
+Room_Type              str
+Room_Rate          float64
+Nights               int64
+Booking_Channel        str
+Traveler_Type          str
+Canceled               str
+dtype: object
+
+Statistical summary of numeric columns:
+       Lead_Time_Days  Room_Rate  Nights
+count          743.00     743.00  761.00
+mean            90.96    8620.32    3.99
+std             51.85    3631.92    1.98
+min              0.00    2507.14    1.00
+25%             48.50    5313.26    2.00
+50%             93.00    8887.49    4.00
+75%            136.00   11553.10    6.00
+max            179.00   14988.24    7.00
+
+================================================================================
+TASK 2: MISSING VALUES AND DUPLICATE BOOKING_IDs
+================================================================================
+Missing values per column:
+Booking_ID          0
+Checkin_Date        0
+Lead_Time_Days     18
+Room_Type           0
+Room_Rate          18
+Nights              0
+Booking_Channel     0
+Traveler_Type       0
+Canceled            0
+dtype: int64
+
+Rows that share a Booking_ID with another row : 22
+Extra (repeated) copies of a Booking_ID         : 11
+Of these, fully identical rows (every column)   : 11
+
+Duplicated Booking_ID records (sorted by ID):
+    Booking_ID Checkin_Date  Lead_Time_Days Room_Type  Room_Rate  Nights Booking_Channel Traveler_Type Canceled
+97      B00097   2026-02-12            58.0  Standard    9670.63       5    Travel Agent       Leisure       No
+760     B00097   2026-02-12            58.0  Standard    9670.63       5    Travel Agent       Leisure       No
+133     B00133   2025-11-02            22.0  Standard    6778.11       4             OTA      Business       No
+752     B00133   2025-11-02            22.0  Standard    6778.11       4             OTA      Business       No
+155     B00155   2025-01-28            78.0    Deluxe    9822.49       6       Corporate      Business       No
+757     B00155   2025-01-28            78.0    Deluxe    9822.49       6       Corporate      Business       No
+250     B00250   2026-02-22            76.0    Deluxe    3535.58       7       Corporate       Leisure      Yes
+753     B00250   2026-02-22            76.0    Deluxe    3535.58       7       Corporate       Leisure      Yes
+299     B00299   2025-07-10            26.0    Deluxe    4310.97       3  Direct Website       Leisure       No
+754     B00299   2025-07-10            26.0    Deluxe    4310.97       3  Direct Website       Leisure       No
+336     B00336   2026-02-04            77.0    Deluxe    5430.23       1       Corporate      Business       No
+756     B00336   2026-02-04            77.0    Deluxe    5430.23       1       Corporate      Business       No
+357     B00357   2026-06-29            53.0  Standard   10560.02       1  Direct Website      Business       No
+751     B00357   2026-06-29            53.0  Standard   10560.02       1  Direct Website      Business       No
+750     B00506   2026-01-31           167.0     Suite    5296.24       7             OTA      Business      Yes
+506     B00506   2026-01-31           167.0     Suite    5296.24       7             OTA      Business      Yes
+528     B00528   2025-04-24           148.0     Suite   13356.25       3    Travel Agent      Business       No
+758     B00528   2025-04-24           148.0     Suite   13356.25       3    Travel Agent      Business       No
+680     B00680   2026-01-25           167.0  Standard    4179.11       6       Corporate       Leisure       No
+755     B00680   2026-01-25           167.0  Standard    4179.11       6       Corporate       Leisure       No
+759     B00736   2026-02-09            19.0     Suite    4521.13       5       Corporate       Leisure       No
+736     B00736   2026-02-09            19.0     Suite    4521.13       5       Corporate       Leisure       No
+
+Duplicates removed. Rows before: 761, rows after: 750
+
+================================================================================
+TASK 3: HANDLING MISSING Lead_Time_Days AND Room_Rate
+================================================================================
+Missing Lead_Time_Days after removing duplicates: 18
+Missing Room_Rate after removing duplicates     : 18
+
+Median lead time used for filling: 93.0 days
+Median Room_Rate by room type (used for filling):
+Room_Type
+Deluxe      8559.12
+Standard    8862.02
+Suite       9472.63
+Name: Room_Rate, dtype: float64
+
+Missing values after cleaning:
+Booking_ID         0
+Checkin_Date       0
+Lead_Time_Days     0
+Room_Type          0
+Room_Rate          0
+Nights             0
+Booking_Channel    0
+Traveler_Type      0
+Canceled           0
+dtype: int64
+
+================================================================================
+TASK 4: DATE CONVERSION - ARRIVAL MONTH AND WEEKDAY
+================================================================================
+Checkin_Date data type is now: datetime64[us]
+Date range in data: 2025-01-01 to 2026-10-31
+
+Sample of new columns:
+  Checkin_Date Arrival_Month Arrival_Year_Month Arrival_Weekday
+0   2025-05-15           May            2025-05        Thursday
+1   2025-10-14       October            2025-10         Tuesday
+2   2026-08-08        August            2026-08        Saturday
+3   2026-03-20         March            2026-03          Friday
+4   2025-05-15           May            2025-05        Thursday
+
+Number of arrivals by weekday (useful for front-desk staffing):
+Arrival_Weekday
+Monday       102
+Tuesday      104
+Wednesday    103
+Thursday     128
+Friday        93
+Saturday     110
+Sunday       110
+Name: count, dtype: int64
+
+================================================================================
+TASK 5: TOTAL BOOKINGS, ROOM NIGHTS, CANCELLATION PERCENTAGE
+================================================================================
+Total bookings (all)                  : 750
+Total room nights booked (all)        : 2988
+Canceled bookings                     : 149
+Overall cancellation percentage       : 19.87%
+Non-canceled (realized) bookings      : 601
+Room nights actually stayed (realized): 2393
+
+================================================================================
+TASK 6: ROW-WISE BOOKING REVENUE (NON-CANCELED BOOKINGS ONLY)
+================================================================================
+  Booking_ID  Nights  Room_Rate Canceled  Total_Revenue
+0     B00000       6    3080.04       No       18480.24
+1     B00001       2    6418.87       No       12837.74
+2     B00002       2   14073.29       No       28146.58
+3     B00003       6   14371.81      Yes           0.00
+4     B00004       7   14898.76       No      104291.32
+5     B00005       2    8455.03       No       16910.06
+6     B00006       5    4717.87       No       23589.35
+7     B00007       4    8599.31       No       34397.24
+
+Total realized revenue: 21,080,871.94
+Average revenue per non-canceled booking: 35,076.33
+Revenue exposed to cancellations   : 4,778,325.31
+
+================================================================================
+TASK 7: ROOM TYPE COMPARISON (RATE, OCCUPANCY, REVENUE)
+================================================================================
+Room-type revenue summary (non-canceled bookings):
+           Bookings  Occupied_Room_Nights  Avg_Room_Rate  Avg_Stay_Nights  Total_Revenue  Occupancy_Share_%  Revenue_Share_%  Cancellation_%
+Room_Type                                                                                                                                   
+Standard        311                  1203        8815.90             3.87    10664972.53              50.27            50.59           18.80
+Deluxe          203                   835        8468.29             4.11     7157340.20              34.89            33.95           21.62
+Suite            87                   355        9238.78             4.08     3258559.21              14.83            15.46           19.44
+
+Highest average rate : Suite
+Most occupied nights : Standard
+Highest revenue      : Standard
+
+Multi-level summary - revenue by Room_Type and Booking_Channel:
+                           Bookings  Room_Nights  Avg_Rate     Revenue
+Room_Type Booking_Channel                                             
+Deluxe    Corporate              48          209   7751.05  1684045.87
+          Direct Website         59          238   8530.78  2040518.91
+          OTA                    53          220   8986.06  1981578.21
+          Travel Agent           43          168   8545.00  1451197.21
+Standard  Corporate              85          295   9047.82  2733490.85
+          Direct Website         58          225   8940.38  1976595.13
+          OTA                    79          345   7902.34  2816352.93
+          Travel Agent           89          338   9324.18  3138533.62
+Suite     Corporate              21           87   9170.57   794800.99
+          Direct Website         20           89   9051.76   794268.88
+          OTA                    22           98   9405.44   903052.04
+          Travel Agent           24           81   9301.55   766437.30
+
+================================================================================
+TASK 8: RANKING BOOKING CHANNELS
+================================================================================
+Channels ranked (1 = best):
+                 Total_Bookings  Realized_Bookings  Total_Revenue  Volume_Rank  Revenue_Rank  Revenue_per_Booking
+Booking_Channel                                                                                                  
+OTA                         181                154     5700983.18            3             1             37019.37
+Travel Agent                194                156     5356168.13            2             2             34334.41
+Corporate                   197                154     5212337.71            1             3             33846.35
+Direct Website              178                137     4811382.92            4             4             35119.58
+
+Highest volume channel : Corporate
+Highest revenue channel: OTA
+
+================================================================================
+TASK 14: LEAD-TIME CATEGORIES USING pd.cut()
+================================================================================
+                     Bookings  Avg_Lead_Days  Share_%
+Lead_Time_Category                                   
+Last-Minute (0-7)          34           3.09     4.53
+Short-Term (8-30)          88          20.22    11.73
+Medium-Term (31-90)       235          60.56    31.33
+Advance (91+)             393         132.95    52.40
+
+================================================================================
+TASK 9: CANCELLATION RATES BY CHANNEL AND LEAD-TIME BAND
+================================================================================
+Channel cancellation table:
+                 Total_Bookings  Canceled  Cancellation_%
+Booking_Channel                                          
+Direct Website              178        41           23.03
+Corporate                   197        43           21.83
+Travel Agent                194        38           19.59
+OTA                         181        27           14.92
+
+Cancellation by lead-time band:
+                     Total_Bookings  Canceled  Cancellation_%
+Lead_Time_Category                                           
+Last-Minute (0-7)                34         8           23.53
+Short-Term (8-30)                88        11           12.50
+Medium-Term (31-90)             235        48           20.43
+Advance (91+)                   393        82           20.87
+
+Cancellation % - Channel (rows) vs Lead-time band (columns):
+Lead_Time_Category  Last-Minute (0-7)  Short-Term (8-30)  Medium-Term (31-90)  Advance (91+)
+Booking_Channel                                                                             
+Corporate                       28.57              26.32                23.33          19.82
+Direct Website                  27.27              16.67                24.62          22.62
+OTA                             14.29               0.00                12.50          19.09
+Travel Agent                    22.22              11.11                18.57          22.73
+
+Highest cancellation channel : Direct Website (23.03%)
+Lowest cancellation channel  : OTA (14.92%)
+Highest cancellation band    : Last-Minute (0-7) (23.53%)
+Lowest cancellation band     : Short-Term (8-30) (12.5%)
+
+================================================================================
+TASK 10: TOP 3 PEAK REVENUE MONTHS
+================================================================================
+Top 3 revenue months (specific year-month):
+Arrival_Year_Month
+2025-10    1381173.38
+2026-04    1358576.27
+2025-05    1307036.20
+Name: Total_Revenue, dtype: float64
+
+Top 3 calendar months (all years combined - shows seasonality):
+Arrival_Month  Total_Revenue
+          May     2385588.14
+        April     2253945.94
+      January     2230977.47
+
+Note: Jan-Oct appear twice in the data (2025 and 2026) while Nov-Dec appear once,
+so combined-year totals favour Jan-Oct. The year-month view above is the fairer one.
+
+================================================================================
+TASK 11: AVERAGE STAY - LEISURE VS BUSINESS
+================================================================================
+               Bookings  Avg_Stay_Nights  Median_Stay_Nights  Avg_Room_Rate  Total_Revenue
+Traveler_Type                                                                             
+Business            303             4.02                 4.0        8850.25    10736252.32
+Leisure             298             3.94                 4.0        8667.63    10344619.62
+
+Business travelers stay longer on average (difference: 0.08 nights).
+
+================================================================================
+TASK 12: NUMPY STATISTICS OF DAILY ROOM RATES
+================================================================================
+Mean daily room rate   : 8,759.70
+Median daily room rate : 8,864.78
+Standard deviation     : 3,606.76
+Coefficient of variation: 41.2%  (std / mean)
+
+Same statistics for each room type:
+  Standard  mean=  8,815.90  median=  8,887.58  std=  3,617.64
+  Deluxe    mean=  8,468.29  median=  8,559.12  std=  3,537.08
+  Suite     mean=  9,238.78  median=  9,506.72  std=  3,667.47
+
+================================================================================
+TASK 13: OUTLIERS IN BOOKING REVENUE (IQR METHOD)
+================================================================================
+Q1 (25th percentile): 14,695.97
+Q3 (75th percentile): 50,434.40
+IQR (Q3 - Q1)       : 35,738.43
+Lower fence         : -38,911.68
+Upper fence         : 104,042.05
+
+Unusually HIGH booking values: 1
+Unusually LOW booking values : 0
+
+High-value bookings:
+Booking_ID Room_Type Booking_Channel  Nights  Room_Rate  Total_Revenue
+    B00004  Standard    Travel Agent       7   14898.76      104291.32
+
+================================================================================
+EXTRA / DELIVERABLE: MONTHLY OCCUPANCY TREND
+================================================================================
+                    Bookings  Occupied_Room_Nights     Revenue  Avg_Rate  Occupancy_Share_%  3M_Moving_Avg_Nights
+Arrival_Year_Month                                                                                               
+2025-01                   33                   128  1037069.60   8102.11               5.35                   NaN
+2025-02                   23                    82   813877.74   9925.34               3.43                   NaN
+2025-03                   19                    79   708122.28   8963.57               3.30                 96.33
+2025-04                   23                    99   895369.67   9044.14               4.14                 86.67
+2025-05                   35                   146  1307036.20   8952.30               6.10                108.00
+2025-06                   33                   110  1068171.55   9710.65               4.60                118.33
+2025-07                   22                    99   904303.24   9134.38               4.14                118.33
+2025-08                   29                   123  1026521.94   8345.71               5.14                110.67
+2025-09                   19                    66   470789.53   7133.17               2.76                 96.00
+2025-10                   36                   149  1381173.38   9269.62               6.23                112.67
+2025-11                   21                    85   760400.02   8945.88               3.55                100.00
+2025-12                   23                    91   859157.00   9441.29               3.80                108.33
+2026-01                   30                   126  1193907.87   9475.46               5.27                100.67
+2026-02                   17                    69   501128.38   7262.73               2.88                 95.33
+2026-03                   21                    81   695415.87   8585.38               3.38                 92.00
+2026-04                   40                   166  1358576.27   8184.19               6.94                105.33
+2026-05                   25                   109  1078551.94   9894.97               4.55                118.67
+2026-06                   36                   128  1073748.82   8388.66               5.35                134.33
+2026-07                   25                   108   887738.21   8219.80               4.51                115.00
+2026-08                   28                   108  1016910.60   9415.84               4.51                114.67
+2026-09                   36                   152  1264884.41   8321.61               6.35                122.67
+2026-10                   27                    89   778017.42   8741.77               3.72                116.33
+
+Text chart of occupied room nights per month (1 '#' = 5 nights):
+  2025-01 | ######################### 128
+  2025-02 | ################ 82
+  2025-03 | ############### 79
+  2025-04 | ################### 99
+  2025-05 | ############################# 146
+  2025-06 | ###################### 110
+  2025-07 | ################### 99
+  2025-08 | ######################## 123
+  2025-09 | ############# 66
+  2025-10 | ############################# 149
+  2025-11 | ################# 85
+  2025-12 | ################## 91
+  2026-01 | ######################### 126
+  2026-02 | ############# 69
+  2026-03 | ################ 81
+  2026-04 | ################################# 166
+  2026-05 | ##################### 109
+  2026-06 | ######################### 128
+  2026-07 | ##################### 108
+  2026-08 | ##################### 108
+  2026-09 | ############################## 152
+  2026-10 | ################# 89
+
+Busiest month (room nights) : 2026-04 (166 nights)
+Quietest month (room nights): 2025-09 (66 nights)
+
+================================================================================
+EXTRA: ARRIVALS BY WEEKDAY (FRONT-DESK STAFFING)
+================================================================================
+                 Arrivals  Room_Nights     Revenue  Arrivals_Share_%
+Arrival_Weekday                                                     
+Monday                 88          345  2896510.40             14.64
+Tuesday                77          287  2452509.43             12.81
+Wednesday              78          302  2560313.63             12.98
+Thursday              107          462  4061236.33             17.80
+Friday                 78          311  2824060.58             12.98
+Saturday               89          361  3334944.78             14.81
+Sunday                 84          325  2951296.79             13.98
+
+Busiest arrival day : Thursday (107 arrivals)
+Quietest arrival day: Tuesday (77 arrivals)
+
+================================================================================
+TASK 15: FIVE REVENUE AND OPERATIONS RECOMMENDATIONS
+================================================================================
+1. ROOM PRICING: Suite rooms earn the highest average rate (9,239), while Standard rooms bring the most revenue (50.6% of total). Protect the Standard rate and use dynamic pricing: raise rates in the peak months (2025-10, 2026-04, 2025-05) and offer upgrade deals in quiet months (lowest month: 2025-09).
+
+2. CANCELLATION CONTROL: Overall cancellation is 19.9%, with Direct Website the highest (23.0%) and OTA the lowest (14.9%). Introduce stricter cancellation windows or a small deposit for Direct Website bookings, and especially for the 'Last-Minute (0-7)' band (23.5% cancelled).
+
+3. CHANNEL STRATEGY: OTA brings the most revenue, Corporate has the most bookings, and Direct Website has the fewest. Compare the commission cost of OTA with its revenue, and run member-rate or loyalty offers to grow Direct Website bookings, where the hotel keeps the full room rate.
+
+4. FRONT-DESK STAFFING: Arrivals peak on Thursday (107 arrivals) and are lowest on Tuesday (77). Schedule extra check-in staff on Thursday and the busiest months (2026-04), and use lighter rosters on Tuesday.
+
+5. STAY-LENGTH AND OVERBOOKING: Business (4.02 nights) and Leisure (3.94 nights) stays are almost the same length, so use one set of multi-night offers (e.g. stay 5 pay 4) for both instead of separate packages. Because about 20% of bookings cancel, allow a small, controlled overbooking buffer (start at 5%, review monthly) on the high-cancellation channel (Direct Website) to reduce empty rooms.

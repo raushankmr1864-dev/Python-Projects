@@ -1,0 +1,5 @@
+Lead_Time_Category,Total_Bookings,Canceled,Cancellation_%
+Last-Minute (0-7),34,8,23.53
+Short-Term (8-30),88,11,12.5
+Medium-Term (31-90),235,48,20.43
+Advance (91+),393,82,20.87
